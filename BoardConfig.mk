@@ -59,7 +59,7 @@ TARGET_CPU_CORTEX_A53 := true
 TARGET_USES_64_BIT_BINDER := true
 
 # Asserts
-TARGET_OTA_ASSERT_DEVICE := none
+TARGET_OTA_ASSERT_DEVICE := potter,potter_retail
 
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)

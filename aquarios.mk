@@ -23,7 +23,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 TARGET_BOOTANIMATION_SIZE := 1080p
 
 # Inherit some common Nitrogen stuff.
-$(call inherit-product, vendor/nitrogen/products/common.mk)
+$(call inherit-product, vendor/aquarios/config/common_full_phone.mk)
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, device/motorola/potter/device.mk)
@@ -35,13 +35,14 @@ TARGET_SCREEN_HEIGHT := 1920
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := potter
-PRODUCT_NAME := nitrogen_potter
+PRODUCT_NAME := aquarios_potter
 PRODUCT_BRAND := motorola
 PRODUCT_MANUFACTURER := motorola
+PRODUCT_MODEL := Moto G5 Plus
 
 # PRODUCT_SYSTEM_PROPERTY_BLACKLIST := ro.product.model
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT=google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys \
+    BUILD_FINGERPRINT=motorola/potter/potter:7.0/NPNS25.137-33-11/11:user/release-keys \
     PRIVATE_BUILD_DESC="potter-7.0/NPNS25.137-33-11/11:user/release-keys" \
     PRODUCT_NAME="Moto G5 Plus"
