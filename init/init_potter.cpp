@@ -32,8 +32,11 @@
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
 
+#include <android-base/properties.h>
 #include "property_service.h"
 #include "vendor_init.h"
+
+using android::init::property_set;
 
 void property_override(char const prop[], char const value[])
 {
@@ -46,16 +49,23 @@ void property_override(char const prop[], char const value[])
         __system_property_add(prop, strlen(prop), value, strlen(value));
 }
 
+void property_override_dual(char const system_prop[], char const vendor_prop[],
+    char const value[])
+{
+    property_override(system_prop, value);
+    property_override(vendor_prop, value);
+}
+
 void num_sims() {
     std::string dualsim;
 
     dualsim = android::base::GetProperty("ro.boot.dualsim", "");
-    android::init::property_set("ro.hw.dualsim", dualsim.c_str());
+    property_set("ro.hw.dualsim", dualsim.c_str());
 
     if (dualsim == "true") {
-        android::init::property_set("persist.radio.multisim.config", "dsds");
+        property_set("persist.radio.multisim.config", "dsds");
     } else {
-        android::init::property_set("persist.radio.multisim.config", "");
+        property_set("persist.radio.multisim.config", "");
     }
 }
 
@@ -66,8 +76,9 @@ void vendor_load_properties()
     if (platform != ANDROID_TARGET)
         return;
 
+    // sku
     std::string sku = android::base::GetProperty("ro.boot.hardware.sku", "");
-    property_override("ro.product.model", sku.c_str());
+    property_override_dual("ro.product.model", "ro.vendor.product.model", sku.c_str());
 
     // fingerprint
     property_override("ro.build.description", "potter-7.0/NPNS25.137-33-11/11:user/release-keys");
@@ -76,23 +87,23 @@ void vendor_load_properties()
     // rmt_storage
     std::string device = android::base::GetProperty("ro.boot.device", "");
     std::string radio = android::base::GetProperty("ro.boot.radio", "");
-    android::init::property_set("ro.hw.device", device.c_str());
-    android::init::property_set("ro.hw.radio", radio.c_str());
-    android::init::property_set("ro.hw.fps", "true");
-    android::init::property_set("ro.hw.imager", "12MP");
+    property_set("ro.hw.device", device.c_str());
+    property_set("ro.hw.radio", radio.c_str());
+    property_set("ro.hw.fps", "true");
+    property_set("ro.hw.imager", "12MP");
 
     num_sims();
 
     if (sku == "XT1687") {
-        android::init::property_set("ro.hw.ecompass", "true");
-        android::init::property_set("ro.hw.nfc", "false");
+        property_set("ro.hw.ecompass", "true");
+        property_set("ro.hw.nfc", "false");
     }
     else {
-        android::init::property_set("ro.hw.ecompass", "false");
-        android::init::property_set("ro.hw.nfc", "true");
+        property_set("ro.hw.ecompass", "false");
+        property_set("ro.hw.nfc", "true");
     }
 
     if (sku == "XT1683") {
-        android::init::property_set("ro.hw.dtv", "true");
+        property_set("ro.hw.dtv", "true");
     }
 }
